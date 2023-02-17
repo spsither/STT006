@@ -44,7 +44,7 @@ jobs:
                 txt_file.write(get_txt(latest_file))
               with open(f'review/{dir}.otr', 'w+') as otr_file:
                 otr_file.write(get_format_otr(latest_file))
-    
+      shell: python
     - name: Git Auto Commit
       uses: stefanzweifel/git-auto-commit-action@v4.16.0
       with:
