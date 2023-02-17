@@ -26,7 +26,7 @@ jobs:
       run: |
         pip install -U pip
         pip install git+https://github.com/OpenPecha/Format-otr.git
-        
+
     - name: fill in review
       run: |
         from format_otr.export_otr import get_txt
@@ -39,6 +39,9 @@ jobs:
           if os.path.isdir(dir) and dir != 'review':
             list_of_otr = glob.glob(f'{dir}/*.otr')
             if list_of_otr:
+              print(dir)
+              for file in list_of_otr:
+                print(file, os.path.getctime(file))
               latest_file = max(list_of_otr, key=os.path.getctime)
               with open(f'review/{dir}.txt', 'w+') as txt_file:
                 txt_file.write(get_txt(latest_file))
