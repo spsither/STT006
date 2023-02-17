@@ -30,8 +30,8 @@ jobs:
     - name: Export a txt file
       run: |
         mkdir -p review
-        ls -At */*.otr | grep -v review/ | awk -F '/' '{arr[$1] = $0}END{for ( a in arr)print a"\t\""arr[a]"\""}' | xargs -n2 bash -c 'touch "review/$0.txt" && export-txt "$1" > "review/$0.txt"'
-        ls -At */*.otr | grep -v review/ | awk -F '/' '{arr[$1] = $0}END{for ( a in arr)print a"\t\""arr[a]"\""}' | xargs -n2 bash -c 'touch "review/$0.otr" && format-otr "$1" > "review/$0.otr"'
+        ls -Art */*.otr | grep -v review/ | awk -F '/' '{arr[$1] = $0}END{for ( a in arr )print a"\t\""arr[a]"\""}' | xargs -n2 bash -c 'touch "review/$0.txt" && export-txt "$1" > "review/$0.txt"'
+        ls -Art */*.otr | grep -v review/ | awk -F '/' '{arr[$1] = $0}END{for ( a in arr )print a"\t\""arr[a]"\""}' | xargs -n2 bash -c 'touch "review/$0.otr" && format-otr "$1" > "review/$0.otr"'
     
     - name: Git Auto Commit
       uses: stefanzweifel/git-auto-commit-action@v4.16.0
