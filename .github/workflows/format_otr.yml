@@ -1,0 +1,40 @@
+name: review
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  export_otr:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.8"
+        
+    - name: Install dependencies
+      run: |
+        pip install -U pip
+        pip install git+https://github.com/OpenPecha/Format-otr.git
+
+    - name: Export a txt file
+      run: |
+        mkdir -p review
+        ls -Art */*.otr | awk -F '/' '{arr[$1] = $0}END{for ( a in arr)print a"\t\""arr[a]"\""}' | xargs -n2 sh -c 'touch "review/$0.txt" && export-txt "$1" > "review/$0.txt"'
+        ls -Art */*.otr | awk -F '/' '{arr[$1] = $0}END{for ( a in arr)print a"\t\""arr[a]"\""}' | xargs -n2 sh -c 'touch "review/$0.otr" && format-otr "$1" > "review/$0.otr"'
+    
+    - name: Git Auto Commit
+      uses: stefanzweifel/git-auto-commit-action@v4.16.0
+      with:
+        commit_message: Added or updated review dir
+
