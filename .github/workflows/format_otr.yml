@@ -26,9 +26,7 @@ jobs:
       run: |
         pip install -U pip
         pip install git+https://github.com/OpenPecha/Format-otr.git
-    - name: clear review
-      run: |
-        rm -rf review
+        
     - name: fill in review
       run: |
         from format_otr.export_otr import get_txt
