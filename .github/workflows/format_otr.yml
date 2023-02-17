@@ -29,9 +29,21 @@ jobs:
 
     - name: Export a txt file
       run: |
-        mkdir -p review
-        ls -Art */*.otr | grep -v review/ | awk -F '/' '{print $1"\t\""$0"\""}' | xargs -n2 bash -c 'touch "review/$0.txt"; export-txt "$1" > "review/$0.txt"'
-        ls -Art */*.otr | grep -v review/ | awk -F '/' '{print $1"\t\""$0"\""}' | xargs -n2 bash -c 'touch "review/$0.otr"; format-otr "$1" > "review/$0.otr"'
+        from format_otr.export_otr import get_txt
+        from format_otr.format_otr import get_format_otr
+        import glob
+        import os
+        if not os.path.exists('./review'):
+          os.makedirs('./review')
+        for dir in os.listdir('.'):
+          if os.path.isdir(dir) and dir != 'review':
+            list_of_otr = glob.glob(f'{dir}/*.otr')
+            if list_of_otr:
+              latest_file = max(list_of_otr, key=os.path.getctime)
+              txt_file = open(f'review/{dir}.txt', 'w+')
+              txt_file.write(get_txt(latest_file))
+              otr_file = open(f'review/{dir}.otr', 'w+')
+              otr_file.write(get_format_otr(latest_file))
     
     - name: Git Auto Commit
       uses: stefanzweifel/git-auto-commit-action@v4.16.0
