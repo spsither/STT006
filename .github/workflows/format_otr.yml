@@ -26,8 +26,10 @@ jobs:
       run: |
         pip install -U pip
         pip install git+https://github.com/OpenPecha/Format-otr.git
-
-    - name: Export a txt file
+    - name: clear review
+      run: |
+        rm -rf review
+    - name: fill in review
       run: |
         from format_otr.export_otr import get_txt
         from format_otr.format_otr import get_format_otr
@@ -46,13 +48,7 @@ jobs:
                 otr_file.write(get_format_otr(latest_file))
       shell: python
 
-    - name: set up git config
-      run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "spsither@gmail.com"
-    - name: commit
-      run: |
-        git add .
-        git commit -m "update review dir"
-        git push origin
-
+    - name: Git Auto Commit
+      uses: stefanzweifel/git-auto-commit-action@v4.16.0
+      with:
+        commit_message: Added or updated review dir
